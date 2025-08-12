@@ -1,0 +1,44 @@
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background: whitesmoke;
+    color: black;
+    line-height: 2px;   
+}
+
+.container{
+    max-width: 1200px;
+    margin: auto;
+    background: whitesmoke;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+.nav-link{
+    color: gray;
+    text-decoration: none;
+    font-weight: 500;
+
+}
+.logo{
+    font-size: 24px;
+    font-weight: 600;
+
+}
+.add-btn{
+    background: black;
+    color: whitesmoke;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.title{
+    text-align: center;
+    padding: 30px;
+    font-size: 30px;
+    border-bottom: 1px solid grey;
+    
+}
