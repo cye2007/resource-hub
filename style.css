@@ -1,0 +1,90 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background: whitesmoke;
+    color: black;
+    line-height: 2px;   
+}
+.container{
+    max-width: 1200px;
+    margin: auto;
+    background: whitesmoke;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+.nav-link{
+    color: gray;
+    text-decoration: none;
+    font-weight: 500;
+}
+.logo{
+    font-size: 24px;
+    font-weight: 600;
+}
+.add-btn{
+    background: black;
+    color: whitesmoke;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.title{
+    text-align: center;
+    padding: 30px;
+    font-size: 30px;
+    border-bottom: 1px solid grey;
+}
+.main{
+    display: grid;
+    grid-template-columns: 400px;
+    min-height: 600px;
+}
+.map{
+    border-right: 1px solid gainsboro;
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: gray;
+}
+.listing{
+    display: flex;
+    flex-direction: column;
+}
+.listing-header{
+    padding: 20px;
+    background: #f8f8f8;
+    border-bottom: 1px solid gray;
+    text-align: center;
+
+}
+.search{
+    padding: 20px;
+    border-bottom: 1px solid grey;
+}
+.search input{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.filters{
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+.filter{
+    padding: 5px 10px;
+    background: #f0f0f0;
+    border
+}
