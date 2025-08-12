@@ -1,14 +1,21 @@
+<<<<<<< HEAD
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+=======
+>>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
 body{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     background: whitesmoke;
     color: black;
     line-height: 2px;   
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
 .container{
     max-width: 1200px;
     margin: auto;
@@ -24,10 +31,18 @@ body{
     color: gray;
     text-decoration: none;
     font-weight: 500;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
 }
 .logo{
     font-size: 24px;
     font-weight: 600;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
 }
 .add-btn{
     background: black;
@@ -42,6 +57,7 @@ body{
     padding: 30px;
     font-size: 30px;
     border-bottom: 1px solid grey;
+<<<<<<< HEAD
 }
 .main{
     display: grid;
@@ -87,4 +103,7 @@ body{
     padding: 5px 10px;
     background: #f0f0f0;
     border
+=======
+    
+>>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
 }
