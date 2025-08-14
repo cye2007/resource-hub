@@ -1,88 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="style.css"/>
-  <script defer src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script defer src="script.js"></script>
 </head>
 <body>
-  <div class="container">
-      
-      <div class="header">
-          <div class="logo"> ResourceHub</div>
-          <button class="add-btn" onclick="openModal()">Add listing</button>
-      </div>
-      
-      <div class="title">Nearby Resources</div>
-      
-      <div class="main">
-          <div class="map">
-              <div id="map-container"></div>
-              <gmp-place-details-compact size="x-large">
-                  <gmp-place-details-place-request></gmp-place-details-place-request>
-              </gmp-place-details-compact>
-          </div>
-          
-          <div class="listings">
-              <div class="listings-header">
-                  <h2>Listings</h2>
-              </div>
-              
-              <div class="search">
-                  <input type="text" id="searchInput" placeholder="Search resources...">
-                  <div class="filters">
-                      <button class="filter active" onclick="setFilter('all')">All</button>
-                      <button class="filter" onclick="setFilter('food')">Food</button>
-                      <button class="filter" onclick="setFilter('housing')">Housing</button>
-                      <button class="filter" onclick="setFilter('health')">Health</button>
-                  </div>
-              </div>
-
-              <div id="results"></div>
-          </div>
-      </div>
-  </div>
-  
-  <div id="modal" class="modal">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h3>Add Resource</h3>
-              <button class="close" onclick="closeModal()">&times;</button>
-          </div>
-          <form id="form">
-              <div class="form-group">
-                  <label>Name</label>
-                  <input type="text" id="name" required>
-              </div>
-              <div class="form-group">
-                  <label>Category</label>
-                  <select id="category" required>
-                      <option value="">Select...</option>
-                      <option value="food">Food</option>
-                      <option value="housing">Housing</option>
-                      <option value="health">Health</option>
-                  </select>
-              </div>
-              <div class="form-group">
-                  <label>Description</label>
-                  <textarea id="desc" required></textarea>
-              </div>
-              <div class="form-group">
-                  <label>Address</label>
-                  <input type="text" id="address" required>
-              </div>
-              <div class="form-group">
-                  <label>Phone</label>
-                  <input type="tel" id="phone">
-              </div>
-              <button type="submit" class="submit">Add Resource</button>
-          </form>
-      </div>
-  </div>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyc8bGdbcQ1xtMMYH-PMeORRa9Z4Dcih0&libraries=maps" defer></script>
+    <div class="container">
+        <div class="header">
+            <div class="logo">ResourceHub</div>
+            <button class="add-btn" onclick="openModal()">Add listing</button>
+        </div>
+        
+        <div class="title">Nearby Resources</div>
+        
+        <div class="main">
+            <div class="map">
+                <div id="map-container">
+                    <select name="types" class="type-select">
+                        <option value="all">All</option>
+                        <option value="food">Food</option>
+                        <option value="housing">Housing</option>
+                        <option value="health">Health</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="listings">
+                <div class="listings-header">
+                    <h2>Listings</h2>
+                    <gmp-place-search orientation="vertical" selectable>
+                        <gmp-place-nearby-search-request
+                        ></gmp-place-nearby-search-request>
+                    </gmp-place-search>
+                </div>
+                
+                <div class="search">
+                    <input type="text" id="searchInput" placeholder="Search resources...">
+                    <div class="filters">
+                        <button class="filter active" onclick="setFilter('all')">All</button>
+                        <button class="filter" onclick="setFilter('food')">Food</button>
+                        <button class="filter" onclick="setFilter('housing')">Housing</button>
+                        <button class="filter" onclick="setFilter('health')">Health</button>
+                    </div>
+                </div>
+                
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Resource</h3>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="form">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="category" required>
+                        <option value="">Select...</option>
+                        <option value="food">Food</option>
+                        <option value="housing">Housing</option>
+                        <option value="health">Health</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="desc" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="address" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="phone">
+                </div>
+                <button type="submit" class="submit">Add Resource</button>
+            </form>
+        </div>
+    </div>
+    
     <script>
         (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
             key: "AIzaSyDyc8bGdbcQ1xtMMYH-PMeORRa9Z4Dcih0",

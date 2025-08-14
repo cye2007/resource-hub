@@ -1,13 +1,11 @@
 const mapContainer = document.getElementById("map-container");
 const placeDetails = document.querySelector("gmp-place-details-compact");
 const placeDetailsRequest = document.querySelector("gmp-place-details-place-request");
+const typeSelect = document.querySelector("select");
 
 let gMap;
-let marker;
 let markers = {};
-let filter = "all";
-let search = " ";
-let placeSearch, placeSearchQuery, typeSelect, placeDetailsPopup, placeRequest;
+let placeSearch, placeSearchQuery, placeDetailsPopup, placeRequest;
 
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
@@ -45,6 +43,12 @@ async function initMap() {
         }
         ;
     });
+    
+    typeSelect.addEventListener('change', (event) => {
+        event.preventDefault();
+        searchPlaces();
+    });
+    
     // Function to update map, marker, and infowindow based on place details
     const updateMapAndMarker = () => {
         console.log("function called");
@@ -114,13 +118,13 @@ async function findCurrentLocation(){
 function searchPlaces(){
     const bounds = gMap.getBounds();
     placeDetailsPopup.map = null;
-
+    
     for(const markerId in markers){
         if (Object.prototype.hasOwnProperty.call(markers, markerId)) {
-                markers[markerId].map = null;
-            }
+            markers[markerId].map = null;
+        }
     }
-
+    
     markers = {};
     if (typeSelect.value) {
         placeSearch.style.display = 'block';
@@ -165,4 +169,18 @@ async function addMarkers(){
             gMap.fitBounds(bounds);
         });
     }
+}
+function openModal(){
+    document.getElementById("modal").style.display = "block";
+
+}
+function closeModal(){
+    document.getElementById("modal").style.display = "none";
+    document.getElementById("form").reset();
+}
+function getCategoryIcon(category){
+    const icons = {
+        food:'🍽️', houseing: '🏠', health: '🏥'
+    }
+    return icons[category] || '📍';
 }
