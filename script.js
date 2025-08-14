@@ -3,13 +3,18 @@ const placeDetails = document.querySelector("gmp-place-details-compact");
 const placeDetailsRequest = document.querySelector("gmp-place-details-place-request");
 
 let gMap;
+let marker;
 let markers = {};
+let filter = "all";
+let search = " ";
+let placeSearch, placeSearchQuery, typeSelect, placeDetailsPopup, placeRequest;
 
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
+    const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
     gMap = new Map(mapContainer, {
         center: {lat: 37.422, lng: -122.085},
-        zoom: 2,
+        zoom: 12,
         mapTypeControl: false,
     });
     
@@ -50,6 +55,7 @@ async function initMap() {
             gMap.setZoom(16); // Set zoom after panning if needed
             marker.content = placeDetails;
             marker.position = placeDetails.place.location;
+            marker.map = gMap
         }
         else {
             console.log("else");
