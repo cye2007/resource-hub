@@ -1,19 +1,27 @@
 const mapContainer = document.getElementById("map-container");
-const placeDetails = document.querySelector("gmp-place-details-compact");
-const placeDetailsRequest = document.querySelector("gmp-place-details-place-request");
+const placeSearch = document.querySelector("gmp-place-search");
+const placeSearchQuery = document.querySelector("gmp-place-nearby-search-request");
 const typeSelect = document.querySelector("select");
 
 let gMap;
 let markers = {};
-let placeSearch, placeSearchQuery, placeDetailsPopup, placeRequest;
+let LatLngBounds;
+let LatLng;
 
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
     const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
+    ({LatLngBounds, LatLng} = await google.maps.importLibrary("core"));
     gMap = new Map(mapContainer, {
-        center: {lat: 37.422, lng: -122.085},
-        zoom: 12,
+        center: {lat: 39.8283, lng: -98.5795},
+        zoom: 4,
         mapTypeControl: false,
+    });
+    
+    placeDetailsPopup = new AdvancedMarkerElement({
+        map: null,
+        content: placeDetails,
+        zIndex: 100
     });
     
     findCurrentLocation();
@@ -117,6 +125,12 @@ async function findCurrentLocation(){
 
 function searchPlaces(){
     const bounds = gMap.getBounds();
+    const cent = gMap.getCenter();
+    const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
+    const diameter = spherical.computeDistanceBetween(ne, sw);
+    const cappedRadius = Math.min((diameter / 2 ), 50000);
+    
     placeDetailsPopup.map = null;
     
     for(const markerId in markers){
@@ -129,7 +143,7 @@ function searchPlaces(){
     if (typeSelect.value) {
         placeSearch.style.display = 'block';
         placeSearchQuery.maxResultCount = 10;
-        placeSearchQuery.locationRestriction = { center: cent, radius: 1000 };
+        placeSearchQuery.locationRestriction = { center: cent, radius: cappedRadius };
         placeSearchQuery.includedTypes = [typeSelect.value];
         
         placeSearch.addEventListener('gmp-load', addMarkers, { once: true });
@@ -172,7 +186,7 @@ async function addMarkers(){
 }
 function openModal(){
     document.getElementById("modal").style.display = "block";
-
+    
 }
 function closeModal(){
     document.getElementById("modal").style.display = "none";
@@ -183,4 +197,12 @@ function getCategoryIcon(category){
         food:'🍽️', houseing: '🏠', health: '🏥'
     }
     return icons[category] || '📍';
+}
+const newResources = {
+    id:resources.length + 1,
+    name: place.displayName || "New Place",
+    category: category,
+    address: place.formattedAddress || "Address Not Available",
+    phone: place.nationalPhoneNumber || "Phone Not Available",
+    isFromMaps: true
 }
