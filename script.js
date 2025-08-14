@@ -3,7 +3,8 @@ const placeSearch = document.querySelector("gmp-place-search");
 const placeSearchQuery = document.querySelector("gmp-place-text-search-request");
 const placeDetails = document.querySelector("gmp-place-details-compact");
 const placeRequest = document.querySelector("gmp-place-details-place-request");
-const queryInput = document.querySelector(".query-input");
+const querySelect = document.querySelector(".query-select");
+const textInput = document.querySelector("#text-input");
 
 let gMap;
 let markers = {};
@@ -37,9 +38,16 @@ async function init() {
     
     marker = new AdvancedMarkerElement({ map: gMap });
 
-    queryInput.addEventListener('change', (event) => {
+    querySelect.addEventListener('change', (event) => {
             event.preventDefault();
-            searchPlaces();
+            searchPlacesBySelect();
+    });
+
+    textInput.addEventListener("keydown", (event) => {
+        if (event.key == 'Enter') {
+            event.preventDefault();
+            searchPlacesByText();
+        }
     });
 
     placeSearch.addEventListener("gmp-select", ({ place }) => {
@@ -72,11 +80,26 @@ async function findCurrentLocation(){
     }
 }
 
-function searchPlaces() {
-    if (queryInput.value.trim() === previousSearchQuery) {
+function searchPlacesBySelect() {
+    for(const markerId in markers){
+        if (Object.prototype.hasOwnProperty.call(markers, markerId)) {
+                markers[markerId].map = null;
+            }
+    }
+    markers = {};
+    if (querySelect.value) {
+        placeSearch.style.display = 'block';
+        placeSearchQuery.textQuery = querySelect.value;
+        placeSearchQuery.locationBias = gMap.getBounds();
+        placeSearch.addEventListener('gmp-load', addMarkers, { once: true });
+    }
+}
+
+function searchPlacesByText() {
+    if (textInput.value.trim() === previousSearchQuery) {
         return;
     }
-    previousSearchQuery = queryInput.value.trim();
+    previousSearchQuery = textInput.value.trim();
     placeDetailsPopup.map = null;
 
     for(const markerId in markers){
@@ -85,10 +108,10 @@ function searchPlaces() {
             }
     }
     markers = {};
-    if (queryInput.value) {
+    if (textInput.value) {
         mapContainer.style.height = '75vh';
         placeSearch.style.display = 'block';
-        placeSearchQuery.textQuery = queryInput.value;
+        placeSearchQuery.textQuery = textInput.value;
         placeSearchQuery.locationBias = gMap.getBounds();
         placeSearch.addEventListener('gmp-load', addMarkers, { once: true });
     }
