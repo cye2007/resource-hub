@@ -1,9 +1,9 @@
 const mapContainer = document.getElementById("map-container");
 const placeSearch = document.querySelector("gmp-place-search");
-const placeSearchQuery = document.querySelector("gmp-place-nearby-search-request");
+const placeSearchQuery = document.querySelector("gmp-place-text-search-request");
 const placeDetails = document.querySelector("gmp-place-details-compact");
 const placeRequest = document.querySelector("gmp-place-details-place-request");
-const typeSelect = document.querySelector(".type-select");
+const queryInput = document.querySelector(".query-input");
 
 let gMap;
 let markers = {};
@@ -12,6 +12,7 @@ let AdvancedMarkerElement;
 let placeDetailsPopup;
 let LatLngBounds;
 let LatLng;
+let previousSearchQuery = '';
 
 async function init() {
     ({ spherical } = await google.maps.importLibrary('geometry'));
@@ -25,9 +26,6 @@ async function init() {
         mapTypeControl: false,
         mapId: 'DEMO_MAP_ID'
     });
-
-    
-
     
     placeDetailsPopup = new AdvancedMarkerElement({
         map: null,
@@ -39,43 +37,16 @@ async function init() {
     
     marker = new AdvancedMarkerElement({ map: gMap });
 
-    // gMap.addListener("click", async (event) => {
-    //     event.stop();
-    //     // Fire when the user clicks on a POI.
-    //     if (event.placeId) {
-    //         console.log("clicked on POI");
-    //         console.log(event.placeId);
-    //         placeDetailsRequest.place = event.placeId;
-    //         updateMapAndMarker();
-    //     }
-    //     else {
-    //         // Fire when the user clicks the map (not on a POI).
-    //         console.log('No place was selected.');
-    //     }
-    //     ;
-    // });
-    
-    typeSelect.addEventListener('change', (event) => {
-        event.preventDefault();
-        searchPlaces();
+    queryInput.addEventListener('change', (event) => {
+            event.preventDefault();
+            searchPlaces();
     });
-    
-    // Function to update map, marker, and infowindow based on place details
-    const updateMapAndMarker = () => {
-        console.log("function called");
-        if (placeDetails.place && placeDetails.place.location) {
-            marker.gMap = null;
-            let adjustedCenter = offsetLatLngRight(placeDetails.place.location, 0.002);
-            gMap.panTo(adjustedCenter);
-            gMap.setZoom(16); // Set zoom after panning if needed
-            marker.content = placeDetails;
-            marker.position = placeDetails.place.location;
-            marker.map = gMap
+
+    placeSearch.addEventListener("gmp-select", ({ place }) => {
+        if (markers[place.id]) {
+            markers[place.id].click();
         }
-        else {
-            console.log("else");
-        }
-    };
+    });
 }
 
 function offsetLatLngRight(latLng, latitudeOffset) {
@@ -102,61 +73,52 @@ async function findCurrentLocation(){
 }
 
 function searchPlaces() {
-    const bounds = gMap.getBounds();
-    const cent = gMap.getCenter();
-    const ne = bounds.getNorthEast();
-    const sw = bounds.getSouthWest();
-    const diameter = spherical.computeDistanceBetween(ne, sw);
-    const cappedRadius = Math.min((diameter / 2 ), 50000);
-    
+    if (queryInput.value.trim() === previousSearchQuery) {
+        return;
+    }
+    previousSearchQuery = queryInput.value.trim();
     placeDetailsPopup.map = null;
-    
+
     for(const markerId in markers){
         if (Object.prototype.hasOwnProperty.call(markers, markerId)) {
-            markers[markerId].map = null;
-        }
+                markers[markerId].map = null;
+            }
     }
-    
     markers = {};
-    if (typeSelect.value) {
+    if (queryInput.value) {
+        mapContainer.style.height = '75vh';
         placeSearch.style.display = 'block';
-        placeSearchQuery.maxResultCount = 10;
-        placeSearchQuery.locationRestriction = { center: cent, radius: cappedRadius };
-        placeSearchQuery.includedTypes = [typeSelect.value];
-        
+        placeSearchQuery.textQuery = queryInput.value;
+        placeSearchQuery.locationBias = gMap.getBounds();
         placeSearch.addEventListener('gmp-load', addMarkers, { once: true });
     }
 }
 
 async function addMarkers(){
     const bounds = new LatLngBounds();
-    placeSearch.style.display = 'block';
-    
+
     if(placeSearch.places.length > 0){
         placeSearch.places.forEach((place) => {
             let marker = new AdvancedMarkerElement({
                 map: gMap,
                 position: place.location
             });
-            
+
             marker.metadata = {id: place.id};
             markers[place.id] = marker;
             bounds.extend(place.location);
-            
+
             marker.addListener('click',(event) => {
                 placeRequest.place = place;
                 placeDetails.style.display = 'block';
-                
+
                 placeDetailsPopup.position = place.location;
                 placeDetailsPopup.map = gMap;
-                
-                gMap.fitBounds(place.viewport, {top: 0, left: 400});
-                
-                placeDetails.addEventListener('gmp-load',() => {
-                    gMap.fitBounds(place.viewport, {top: 0, right: 450});
-                }, { once: true });
-                
+
+                gMap.fitBounds(place.viewport, {top: 200, right: 450});
+
             });
+
             gMap.setCenter(bounds.getCenter());
             gMap.fitBounds(bounds);
         });
@@ -171,10 +133,6 @@ function hidePlaceDetailsPopup() {
 }
 
 init();
-
-function setFilter(filter) {
-    typeSelect.value = filter;
-}
 
 function openModal(){
     document.getElementById("modal").style.display = "block";
@@ -201,39 +159,98 @@ const newResources = {
     isFromMaps: true
 }
 // Quick list of resources 
-const resources = [
-    {
-        id: 1,
-        name: "Downtown Food Bank",
-        category: "food",  // This will match our filter buttons
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        address: "123 Main St",
-        phone: "(555) 123-4567",
-        icon: "🍽️"
-    },
-    {
-        id: 2,
-        name: "Hope Shelter",
-        category: "housing", 
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        address: "456 Oak Ave",
-        phone: "(555) 234-5678",
-        icon: "🏠"
-    },
-    {
-        id: 3,
-        name: "Community Health Center",
-        category: "health",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        address: "789 Pine St",
-        phone: "(555) 345-6789",
-        icon: "🏥"
-    }
-];
-function render(){
-    const filtered = resources.filter(r =>
-    (filter == "all" || r.category == filter)&&
-    (search == " "|| r.name.toLowerCase().includes(search.toLowerCase()))
-    );
-    document.getElementById("results").innerHTML = filtered.map((r,i))
-}
+// const resources = [
+//     {
+//         id: 1,
+//         name: "Downtown Food Bank",
+//         category: "food",  // This will match our filter buttons
+//         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+//         address: "123 Main St",
+//         phone: "(555) 123-4567",
+//         icon: "🍽️"
+//     },
+//     {
+//         id: 2,
+//         name: "Hope Shelter",
+//         category: "housing", 
+//         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+//         address: "456 Oak Ave",
+//         phone: "(555) 234-5678",
+//         icon: "🏠"
+//     },
+//     {
+//         id: 3,
+//         name: "Community Health Center",
+//         category: "health",
+//         desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+//         address: "789 Pine St",
+//         phone: "(555) 345-6789",
+//         icon: "🏥"
+//     },
+//     { 
+//     id: 4, 
+//     name: "Sunrise Soup Kitchen", 
+//     category: "food", 
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
+//     address: "245 Elm Street", 
+//     phone: "(555) 456-7890", 
+//     icon: "🍽️" 
+//     },
+//     { 
+//     id: 5, 
+//     name: "Safe Haven Housing", 
+//     category: "housing", 
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
+//     address: "567 Maple Drive", 
+//     phone: "(555) 567-8901", 
+//     icon: "🏠" 
+//     },
+//     { 
+//     id: 6, 
+//     name: "Westside Medical Clinic", 
+//     category: "health", 
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
+//     address: "890 Cedar Lane", 
+//     phone: "(555) 678-9012", 
+//     icon: "🏥" 
+//     },
+//     { 
+//     id: 7, 
+//     name: "Fresh Start Pantry", 
+//     category: "food", 
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
+//     address: "321 Birch Road", 
+//     phone: "(555) 789-0123", 
+//     icon: "🍽️" 
+//     },
+//     { 
+//     id: 8, 
+//     name: "Unity Emergency Housing", 
+//     category: "housing", 
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
+//     address: "654 Willow Court", 
+//     phone: "(555) 890-1234", 
+//     icon: "🏠" 
+//     },
+//     { 
+//     id: 9, 
+//     name: "Northside Family Clinic", 
+//     category: "health", 
+//     desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 
+//     address: "987 Spruce Avenue", 
+//     phone: "(555) 901-2345", 
+//     icon: "🏥" 
+//     }
+// ];
+
+// function render(){
+//     const filtered = resources.filter(r =>
+//     (filter == "all" || r.category == filter)&&
+//     (search == " "|| r.name.toLowerCase().includes(search.toLowerCase()))
+//     );
+//     document.getElementById("results").innerHTML = filtered.map((r,i) =>'').join(" ")
+// }
+// document.addEventListener("DOMContentLoaded", function(){
+// render();
+// initMap();
+// });
