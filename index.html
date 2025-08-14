@@ -37,6 +37,10 @@
                         <gmp-place-nearby-search-request></gmp-place-nearby-search-request>
                         <gmp-place-all-content></gmp-place-all-content>
                     </gmp-place-search>
+                    <gmp-place-details-compact orientation="horizontal">
+                        <gmp-place-details-place-request></gmp-place-details-place-request>
+                        <gmp-place-all-content></gmp-place-all-content>
+                    </gmp-place-details-compact>
                 </div>
                 
                 <div class="search">
@@ -88,6 +92,16 @@
                 </div>
                 <button type="submit" class="submit">Add Resource</button>
             </form>
+        </div>
+    </div>
+    <div class="resource">
+        <div class="icon">${r.icon}</div>
+        <div class="content">
+            <h3>Listing ${i + 1}${r.isFromMaps ? ' (From Maps)' : ''}</h3>
+            <div class="category">${r.category}</div>
+            <div class="description">${r.desc}</div>
+            <div class="phone">${r.phone}</div>
+            <div class="address">${r.address}</div>
         </div>
     </div>
     
