@@ -1,109 +1,423 @@
-<<<<<<< HEAD
-*{
+/* Reset some defaults */
+* { 
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    padding: 0; 
+    box-sizing: border-box; 
 }
-=======
->>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
-body{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background: whitesmoke;
-    color: black;
-    line-height: 2px;   
-}
-<<<<<<< HEAD
-=======
 
->>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
-.container{
-    max-width: 1200px;
-    margin: auto;
-    background: whitesmoke;
+/* Page basics */
+body {
+    font-family: system-ui, sans-serif;
+    background: #f5f5f5;
+    color: #333;
 }
-.header{
+
+/* Wrapper for everything */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+}
+
+/* Header with logo + button */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 30px;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
 }
-.nav-link{
-    color: gray;
-    text-decoration: none;
-    font-weight: 500;
-<<<<<<< HEAD
-=======
 
->>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
+.logo img {
+    width: 200px;
+    height: 200px;
 }
-.logo{
-    font-size: 24px;
-    font-weight: 600;
-<<<<<<< HEAD
-=======
-
->>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
-}
-.add-btn{
-    background: black;
-    color: whitesmoke;
+.add-btn {
+    background: #333;
+    color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
-.title{
+
+/* Section title */
+.title {
     text-align: center;
     padding: 30px;
-    font-size: 30px;
-    border-bottom: 1px solid grey;
-<<<<<<< HEAD
+    font-size: 32px;
+    border-bottom: 1px solid #ddd;
 }
-.main{
+
+/* Layout: map + list */
+.main {
     display: grid;
-    grid-template-columns: 400px;
+    grid-template-columns: 1fr 400px;
     min-height: 600px;
 }
-.map{
-    border-right: 1px solid gainsboro;
+
+/* Map styles */
+.map {
+    border-right: 1px solid #ddd;
     background: #f8f8f8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: gray;
+    position: relative;
 }
-.listing{
+
+#map-container {
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+}
+
+/* Listings panel */
+.listings {
     display: flex;
     flex-direction: column;
 }
-.listing-header{
+
+.listings-header {
     padding: 20px;
     background: #f8f8f8;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #ddd;
     text-align: center;
+}
 
-}
-.search{
+/* Search area */
+.search {
     padding: 20px;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid #ddd;
 }
-.search input{
+
+.search input {
     width: 100%;
     padding: 10px;
-    border: 1px solid gray;
+    border: 1px solid #ddd;
     border-radius: 5px;
     margin-bottom: 10px;
 }
-.filters{
+
+/* Filter chips */
+.filters {
     display: flex;
     gap: 5px;
     flex-wrap: wrap;
 }
-.filter{
+
+.filter {
     padding: 5px 10px;
     background: #f0f0f0;
-    border
-=======
-    
->>>>>>> 001ef7e1122d850dbc946a1d86e904cd21ba45e0
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter.active, .filter:hover {
+    background: #333;
+    color: white;
+}
+
+/* Resource list items */
+.resource {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    gap: 15px;
+}
+
+.resource:hover { 
+    background: #f8f8f8; 
+}
+
+/* Icon box for listings */
+.icon {
+    width: 50px;
+    height: 50px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.content h3 { 
+    margin-bottom: 5px; 
+}
+
+/* Category tags */
+.category {
+    background: #333;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.description { 
+    color: #666; 
+    margin-bottom: 8px; 
+    font-size: 14px; 
+}
+
+.phone { 
+    color: #0066cc; 
+    font-weight: 500; 
+}
+
+.address { 
+    color: #888; 
+    font-size: 12px; 
+}
+
+/* Popup modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.close { 
+    background: none; 
+    border: none; 
+    font-size: 24px; 
+    cursor: pointer; 
+}
+
+/* Form fields */
+.form-group { 
+    margin-bottom: 15px; 
+}
+
+.form-group label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: 500; 
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: none;
+}
+
+/* Submit button */
+.submit {
+    width: 100%;
+    padding: 12px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Hide Google Maps place details until needed */
+gmp-place-details-compact {
+    visibility: hidden;
+}
+
+/* adjustments */
+@media(max-width: 1024px){
+    .container{
+        max-width: 100%;
+        margin: 0 10px;
+    }
+    .main{
+        grid-template-columns: 1fr 350px;
+    }
+}
+@media (max-width: 768px) {
+    .container {
+        margin: 0; 
+    }
+    .header { 
+        flex-direction: column; 
+        gap: 15px; 
+        padding: 15px; 
+        text-align: center;
+    }
+    .nav { 
+        order: 2;
+        gap: 15px; 
+        justify-content: center;
+    }
+    .add-btn { 
+        order: 3;
+        width: 100%;
+        max-width: 200px;
+    }
+    .title { 
+        padding: 20px 15px; 
+        font-size: 1.8rem; 
+    }
+    .main { 
+        grid-template-columns: 1fr; 
+        min-height: auto;
+    }
+    .map { 
+        height: 350px; 
+        border-right: none; 
+        border-bottom: 1px solid #ddd; 
+        order: 1;
+    }
+    #map-container { min-height: 350px; }
+    .listings {
+        order: 2;
+        min-height: 400px;
+    }
+    .search { padding: 15px; }
+    .filters { 
+        justify-content: center; 
+        gap: 8px;
+    }
+    .filter { 
+        flex: 1; 
+        min-width: 60px;
+        text-align: center;
+    }
+    .resource { 
+        padding: 15px; 
+        flex-direction: column;
+        text-align: center;
+    }
+    .icon { 
+        align-self: center; 
+        margin-bottom: 10px;
+    }
+    gmp-place-details-compact { 
+        position: relative; 
+        top: 0; 
+        right: 0; 
+        max-width: 100%;
+        margin: 10px;
+    }
+    .modal-content {
+        width: 95%;
+        max-width: 350px;
+        padding: 20px;
+        margin: 10px;
+    }
+}
+@media (max-width: 480px) {
+    .header { 
+        padding: 10px; 
+    }
+    .logo { 
+        font-size: 1.3rem; 
+    }
+    .nav { 
+        flex-direction: column;
+        gap: 10px;
+    }
+    .nav-link { 
+        padding: 8px 15px;
+        background: #f0f0f0;
+        border-radius: 5px;
+        text-align: center;
+    }
+    .title { 
+        font-size: 1.5rem; 
+        padding: 15px 10px;
+    }
+    .map { height: 250px; }
+    #map-container { 
+        min-height: 250px; 
+    }
+    .search input { 
+        font-size: 16px; 
+    } /* Prevents zoom on iOS */
+    .filters { 
+        flex-direction: column;
+        gap: 5px;
+    }
+    .filter { 
+        width: 100%;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    .resource { 
+        padding: 10px; 
+        gap: 10px;
+    }
+    .icon { 
+        width: 40px; 
+        height: 40px; 
+        font-size: 1.2rem;
+    }
+    .content h3 { 
+        font-size: 1rem; 
+    }
+    .description { 
+        font-size: 0.85rem; 
+    }
+    .modal-content {
+        width: 98%;
+        padding: 15px;
+        max-height: 90vh;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+@media (max-width: 320px){
+    .header{
+        padding: 8px;
+    }
+    .logo{
+        font-size: 1.2rem;
+    }
+    .title{
+        font-size: 1.3rem;
+    }
+    .map{
+        height: 200px;
+    }
+    #map-container{
+        min-height: 200px;
+    }
+    .listings-header{
+        padding: 15px 10px;
+    }
+    .search{
+        padding: 10px;
+    }
+    .resource{
+        padding: 8px;
+    }
+    .modal-content{
+        padding: 10px;
+    }
 }
